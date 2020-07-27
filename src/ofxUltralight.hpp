@@ -75,5 +75,24 @@ public:
 
 	void update(); //1초간 안부르면 ultralight 타임아웃. 멀티 쓰레딩해야 하나?
 
+	void draw(ofRectangle screen);
+	void draw(vector<ofRectangle> screens);
+
+	void mousePressed(int x, int y, int button, ofRectangle screen);
+	void mousePressed(int x, int y, int button, vector<ofRectangle> screens);
+
+	void mouseReleased(int x, int y, int button, ofRectangle screen);
+	void mouseReleased(int x, int y, int button, vector<ofRectangle> screens);
+	
+	void mouseScrolled(int x, int y, float scrollX, float scrollY, ofRectangle screen);
+	void mouseScrolled(int x, int y, float scrollX, float scrollY, vector<ofRectangle> screens);
+
+
+	function<bool(int, int, ofRectangle)> in_range = [](int x, int y, ofRectangle rect)->bool {
+		return x >= rect.x && x <= (rect.x + rect.width)
+			&& y >= rect.y && y <= (rect.y + rect.height);
+	};
+
+
 	ofxUltralight(ultralight::Config* _config = nullptr);
 };

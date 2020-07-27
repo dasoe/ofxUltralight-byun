@@ -15,13 +15,7 @@ public:
 	void mouseScrolled(int x, int y, float scrollX, float scrollY);
 
 	ultralight::Config ultralight_config;
-	ofxUltralight::Ptr web_loader;
-
-	function<bool(int, int, ofRectangle)> in_range = [](int x, int y, ofRectangle rect)->bool {
-		return x >= rect.x && x <= (rect.x + rect.width)
-			&& y >= rect.y && y <= (rect.y + rect.height);
-	};
-
+	ofxUltralight::Ptr ulBrowser;
 	ofRectangle screen;
 
 };

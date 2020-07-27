@@ -86,6 +86,102 @@ void ofxUltralight::update() {
 	}
 }
 
+void ofxUltralight::draw(ofRectangle screen) {
+	vector<ofRectangle> screens;
+	screens.push_back(screen);
+	draw(screens);
+}
+
+void ofxUltralight::draw(vector<ofRectangle> screens) {
+	auto web_assets = this->getViewAssets();
+	if (web_assets.size()) {
+		for (int i = 0; i < screens.size(); i++) {
+			const auto& screen = screens[i];
+			web_assets[i].tex->draw(screen);
+		}
+	}
+
+}
+
+void ofxUltralight::mousePressed(int x, int y, int button, ofRectangle screen) {
+	vector<ofRectangle> screens;
+	screens.push_back(screen);
+	mousePressed(x, y, button, screens);
+}
+	
+void ofxUltralight::mousePressed(int x, int y, int button, vector<ofRectangle> screens) {
+	ultralight::MouseEvent mouse_event;
+	mouse_event.type = ultralight::MouseEvent::kType_MouseDown;
+	mouse_event.button = ultralight::MouseEvent::Button(OF_MOUSE_BUTTON_LEFT + 1);
+	mouse_event.x = x;
+	mouse_event.y = y;
+
+	auto web_assets = this->getViewAssets();
+
+	for (int i = 0; i < screens.size(); i++) {
+		const auto& screen = screens[i];
+		if (in_range(x, y, screen)) {
+
+			mouse_event.x -= screen.x;
+			mouse_event.y -= screen.y;
+
+			web_assets[i].view->FireMouseEvent(mouse_event);
+		}
+	}
+
+}
+void ofxUltralight::mouseReleased(int x, int y, int button, ofRectangle screen) {
+	vector<ofRectangle> screens;
+	screens.push_back(screen);
+	mouseReleased(x, y, button, screens);
+}
+
+void ofxUltralight::mouseReleased(int x, int y, int button, vector<ofRectangle> screens) {
+	ultralight::MouseEvent mouse_event;
+	mouse_event.type = ultralight::MouseEvent::kType_MouseUp;
+	mouse_event.button = ultralight::MouseEvent::Button(OF_MOUSE_BUTTON_LEFT + 1);
+	mouse_event.x = x;
+	mouse_event.y = y;
+
+	auto web_assets = this->getViewAssets();
+
+	for (int i = 0; i < screens.size(); i++) {
+		const auto& screen = screens[i];
+		if (in_range(x, y, screen)) {
+
+			mouse_event.x -= screen.x;
+			mouse_event.y -= screen.y;
+
+			web_assets[i].view->FireMouseEvent(mouse_event);
+		}
+	}
+}
+
+void ofxUltralight::mouseScrolled(int x, int y, float scrollX, float scrollY, ofRectangle screen) {
+	vector<ofRectangle> screens;
+	screens.push_back(screen);
+	mouseScrolled(x, y, scrollX, scrollY, screens);
+}
+
+void ofxUltralight::mouseScrolled(int x, int y, float scrollX, float scrollY, vector<ofRectangle> screens) {
+
+	ultralight::ScrollEvent scroll_event;
+	scroll_event.type = ultralight::ScrollEvent::kType_ScrollByPixel;
+	scroll_event.delta_x = scrollX * 30;
+	scroll_event.delta_y = scrollY * 30;
+
+	auto web_assets = this->getViewAssets();
+
+	for (int i = 0; i < screens.size(); i++) {
+		const auto& screen = screens[i];
+
+		if (in_range(x, y, screen)) {
+			web_assets[i].view->FireScrollEvent(scroll_event);
+		}
+	}
+}
+
+
 GLuint GeneratePBOReader(int width, int height, int numChannels) {
 	int data_size = width * height * numChannels;
 	GLuint  pbo;
